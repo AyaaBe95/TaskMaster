@@ -13,6 +13,8 @@
   * Add tasks: here user can create his own task.
   
   ![](https://github.com/AyaaBe95/TaskMaster/blob/main/images/add.PNG)
+  ![](https://github.com/AyaaBe95/TaskMaster/blob/main/images/submit.PNG)
+
   
   * All tasks:here user can see his all tasks.
   
