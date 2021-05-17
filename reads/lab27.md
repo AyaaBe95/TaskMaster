@@ -6,7 +6,7 @@
 
 ## Contains:
 
-1. **Homepage:
+1. ** Homepage:
 - Setting button take the user to setting activity.
 - Task buttons: take the user to detail activity.
 - after the user add his name,his name will be displayed in the homepage.
