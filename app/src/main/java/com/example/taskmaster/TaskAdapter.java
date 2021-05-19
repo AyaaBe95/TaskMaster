@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,42 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public List<Task> tasks=new ArrayList<Task>();
-    public TaskAdapter(List<Task> tasks ) {
+      private OnItemClickListener mListener;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView taskTitle;
+        private TextView taskBody;
+        private TextView taskState;
+        private OnItemClickListener mListener;
+
+
+
+        public ViewHolder( View itemView,OnItemClickListener listener) {
+            super(itemView);
+            this.taskTitle= itemView.findViewById(R.id.tTitle);
+            this.taskBody=itemView.findViewById(R.id.tBody);
+            this.taskState=itemView.findViewById(R.id.tState);
+            this.mListener=listener;
+            itemView.setOnClickListener(this);
+
+
+
+        }
+
+
+        @Override
+        public void onClick(View view) {
+         mListener.onItemClick(getAdapterPosition());
+        }
+    }
+
+
+    public TaskAdapter(List<Task> tasks,OnItemClickListener listener) {
         this.tasks = tasks;
+        this.mListener=listener;
     }
 
     @NonNull
@@ -24,7 +56,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View v = layoutInflater.inflate(R.layout.fragment_task, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(v);
+        ViewHolder viewHolder = new ViewHolder(v,mListener);
         return viewHolder;
 
     }
@@ -43,7 +75,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         TextView taskState = holder.taskState;
         taskState.setText(task.getState());
 
-
     }
 
     @Override
@@ -51,18 +82,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return tasks.size();
     }
 
-    //references
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView taskTitle;
-        private TextView taskBody;
-        private TextView taskState;
-
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            taskTitle = itemView.findViewById(R.id.tTitle);
-            taskBody = itemView.findViewById(R.id.tBody);
-            taskState = itemView.findViewById(R.id.tState);
-        }
+    public interface OnItemClickListener{
+        void onItemClick(int position);
     }
+
+
 }

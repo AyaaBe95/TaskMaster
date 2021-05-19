@@ -18,18 +18,23 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView display = findViewById(R.id.display);
-        TextView para = findViewById(R.id.para);
+        TextView title = findViewById(R.id.textView);
+        TextView para = findViewById(R.id.textView7);
+        TextView state = findViewById(R.id.textView8);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String title=getIntent().getStringExtra("title");
-//        display.setText(title + " Details");
-        display.setText(sharedPreferences.getString("username", "User")+"'s "+ title + " Detail");
+        String Title = getIntent().getStringExtra("title");
+        String Body = getIntent().getStringExtra("body");
+        String State = getIntent().getStringExtra("state");
 
-        para.setText("consectetur, iz Lorem Ipsum teksta, i prolazeći kroz citate te riječi u klasičnoj književnosti, otkrio nedvojbeni izvor. Lorem Ipsum dolazi iz odlomaka 1.10.32 i 1.10.33 Ciceronovog djela pod naslovom  (Krajnosti dobra i zla),");
-        if(title==null){
-            display.setText(sharedPreferences.getString("username", "User")+"'s Task Detail");
-            para.setText("No details");
+        title.setText(sharedPreferences.getString("username", "User")+"'s "+ Title + " Detail");
+        para.setText(Body);
+        state.setText(State);
+
+        if(Title==null){
+            title.setText(sharedPreferences.getString("username", "User")+"'s Task Detail");
+            para.setText("Empty");
+            state.setText("Empty");
         }
 
     }

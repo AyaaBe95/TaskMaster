@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,30 +17,36 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskAdapter.OnItemClickListener {
 
     String title1,title2,title3;
     private TextView taskTitle;
     private TextView taskBody;
     private TextView taskState;
+
+    ArrayList<Task> tasks = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         taskTitle = findViewById(R.id.tTitle);
         taskBody = findViewById(R.id.tBody);
         taskState =findViewById(R.id.tState);
 
-        ArrayList<Task> tasks = new ArrayList<>();
 
         tasks.add(new Task("Task 1","Solve Homework 1", "Complete"));
         tasks.add(new Task("Task 2","Solve Homework 2", "In progress"));
         tasks.add(new Task("Task 3","Solve Homework 3", "New"));
+
         RecyclerView recyclerView ;
 
         recyclerView = findViewById(R.id.recyclerView);
 
-        TaskAdapter adapter = new TaskAdapter(tasks);
+        TaskAdapter adapter = new TaskAdapter(tasks,this);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setHasFixedSize(true);
@@ -51,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         TextView welcomeMsg = findViewById(R.id.welcome);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         welcomeMsg.setText(sharedPreferences.getString("username", "User") + "'s Tasks");
-
-
 
 
 
@@ -75,5 +80,16 @@ public class MainActivity extends AppCompatActivity {
         Intent settingActivity = new Intent(MainActivity.this,UserSetting.class);
         startActivity(settingActivity);
 
+    }
+
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent =new Intent(this, Details.class);
+        intent.putExtra("title",tasks.get(position).getTitle());
+        intent.putExtra("body",tasks.get(position).getBody());
+        intent.putExtra("state",tasks.get(position).getState());
+
+        startActivity(intent);
     }
 }
