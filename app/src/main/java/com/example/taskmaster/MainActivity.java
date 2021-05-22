@@ -3,6 +3,7 @@ package com.example.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     private TextView taskTitle;
     private TextView taskBody;
     private TextView taskState;
+    public TaskDatabase db;
+    public TaskDao taskDao;
+
+
 
     ArrayList<Task> tasks = new ArrayList<>();
 
@@ -38,26 +43,28 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         taskState =findViewById(R.id.tState);
 
 
-        tasks.add(new Task("Task 1","Solve Homework 1", "Complete"));
-        tasks.add(new Task("Task 2","Solve Homework 2", "In progress"));
-        tasks.add(new Task("Task 3","Solve Homework 3", "New"));
-
-        RecyclerView recyclerView ;
-
-        recyclerView = findViewById(R.id.recyclerView);
-
-        TaskAdapter adapter = new TaskAdapter(tasks,this);
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager linear=  new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linear);
 
 
         TextView welcomeMsg = findViewById(R.id.welcome);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         welcomeMsg.setText(sharedPreferences.getString("username", "User") + "'s Tasks");
+
+        db= Room.databaseBuilder(getApplicationContext(),
+                TaskDatabase.class, "task_database").allowMainThreadQueries().build();
+        taskDao = db.taskDao();
+        tasks = (ArrayList<Task>) taskDao.getAllTasks();
+
+
+        RecyclerView recyclerView ;
+
+        recyclerView = findViewById(R.id.recyclerView);
+
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new TaskAdapter(tasks, this));
 
 
 
@@ -92,4 +99,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
         startActivity(intent);
     }
+
+
 }
