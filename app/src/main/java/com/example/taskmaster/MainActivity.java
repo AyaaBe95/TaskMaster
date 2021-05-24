@@ -9,11 +9,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +47,14 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         taskBody = findViewById(R.id.tBody);
         taskState =findViewById(R.id.tState);
 
+        try {
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.configure(getApplicationContext());
 
-
+            Log.i("Tutorial", "Initialized Amplify");
+        } catch (AmplifyException e) {
+            Log.e("Tutorial", "Could not initialize Amplify", e);
+        }
 
         TextView welcomeMsg = findViewById(R.id.welcome);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -58,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         RecyclerView recyclerView ;
 
         recyclerView = findViewById(R.id.recyclerView);
-
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);

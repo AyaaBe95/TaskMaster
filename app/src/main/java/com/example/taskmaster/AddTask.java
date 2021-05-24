@@ -5,6 +5,7 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,7 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.model.query.Where;
+import com.amplifyframework.datastore.generated.model.TaskModel;
+
 import java.util.List;
+
 
 public class AddTask extends AppCompatActivity  {
 
@@ -36,11 +42,14 @@ public class AddTask extends AppCompatActivity  {
         setContentView(R.layout.activity_add_task);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         add_title= findViewById(R.id.addtitle);
         add_desc= findViewById(R.id.addDesc);
         add_state= findViewById(R.id.addState);
         btn_addTask= findViewById(R.id.add1);
         totalTasks= findViewById(R.id.total);
+
+
 
         String[] taskState = new String[]{"Select State","new", "in progress", "complete"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -72,12 +81,48 @@ public class AddTask extends AppCompatActivity  {
         String description = add_desc.getText().toString();
         String state = add_state.getSelectedItem().toString();
 
+
         Task task = new Task();
         task.setTitle(title);
         task.setBody(description);
         task.setState(state);
         taskDao.insertTask(task);
+        TaskModel item = TaskModel.builder()
+                .title(title)
+                .body(description)
+                .state(state)
+                .build();
 
+        Amplify.DataStore.save(item,
+                success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
+                error -> Log.e("Tutorial", "Could not save item to DataStore", error)
+        );
+
+        Amplify.DataStore.query(TaskModel.class,
+                todos -> {
+                    while (todos.hasNext()) {
+                        TaskModel todo = todos.next();
+
+                        Log.i("Tutorial", "==== Todo ====");
+                        Log.i("Tutorial", "Title: " + todo.getTitle());
+
+                        if (todo.getTitle() != null) {
+                            Log.i("Tutorial", "Title: " + todo.getTitle());
+                        }
+
+                        if (todo.getBody() != null) {
+                            Log.i("Tutorial", "Body: " + todo.getBody());
+                        }
+
+                        if (todo.getState() != null) {
+                            Log.i("Tutorial", "Description: " + todo.getState());
+                        }
+                    }
+                },
+                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+        );
+
+        
         Intent intent = new Intent(AddTask.this, MainActivity.class);
         Toast.makeText(AddTask.this, "Add Task Successfully", Toast.LENGTH_SHORT).show();
         startActivity(intent);
