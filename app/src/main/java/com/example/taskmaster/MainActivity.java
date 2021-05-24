@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     public TaskDao taskDao;
 
 
-
     ArrayList<Task> tasks = new ArrayList<>();
 
 
