@@ -13,6 +13,8 @@ public class alltasks extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alltasks);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("All Tasks");
+
 
     }
 

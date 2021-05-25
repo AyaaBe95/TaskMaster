@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.datastore.generated.model.TaskModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     private TextView taskState;
     public TaskDatabase db;
     public TaskDao taskDao;
+    TaskAdapter taskAdapter;
+    RecyclerView recyclerView ;
 
-
-    ArrayList<Task> tasks = new ArrayList<>();
+    List<Task> tasks = new ArrayList<>();
 
 
     @Override
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("My Tasks");
+
         taskTitle = findViewById(R.id.tTitle);
         taskBody = findViewById(R.id.tBody);
         taskState =findViewById(R.id.tState);
@@ -59,22 +63,37 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         welcomeMsg.setText(sharedPreferences.getString("username", "User") + "'s Tasks");
 
-        db= Room.databaseBuilder(getApplicationContext(),
-                TaskDatabase.class, "task_database").allowMainThreadQueries().build();
-        taskDao = db.taskDao();
-        tasks = (ArrayList<Task>) taskDao.getAllTasks();
-
-
-        RecyclerView recyclerView ;
-
+//        db= Room.databaseBuilder(getApplicationContext(),
+//                TaskDatabase.class, "task_database").allowMainThreadQueries().build();
+//        taskDao = db.taskDao();
+//        tasks = (ArrayList<Task>) taskDao.getAllTasks();
         recyclerView = findViewById(R.id.recyclerView);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(tasks, this));
 
+        Amplify.DataStore.query(TaskModel.class,
+                todos -> {
+                    List<Task> taskList = new ArrayList<>();
+                    while (todos.hasNext()) {
+                        TaskModel todo = todos.next();
+                        Task t = new Task();
+                        Log.i("Tutorial", "==== Todo ====");
+                        Log.i("Tutorial", "Name: " + todo.getTitle());
+                        Log.i("Tutorial", "Name: " + todo.getBody());
+                        Log.i("Tutorial", "Name: " + todo.getState());
+                        t.setTitle(todo.getTitle());
+                        t.setBody(todo.getBody());
+                        t.setState(todo.getState());
+                        taskList.add(t);
+                        taskAdapter = new TaskAdapter(MainActivity.class,taskList);
+
+                    }
+                    recyclerView.setAdapter(taskAdapter);
+                },
+                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+        );
 
 
     }
@@ -101,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
     @Override
     public void onItemClick(int position) {
+
         Intent intent =new Intent(this, Details.class);
         intent.putExtra("title",tasks.get(position).getTitle());
         intent.putExtra("body",tasks.get(position).getBody());

@@ -17,6 +17,8 @@ public class Details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Task's Details");
+
 
         TextView title = findViewById(R.id.textView);
         TextView para = findViewById(R.id.textView7);
