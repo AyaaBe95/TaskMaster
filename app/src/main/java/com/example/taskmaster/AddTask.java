@@ -32,7 +32,6 @@ public class AddTask extends AppCompatActivity  {
     public TaskDatabase db;
     public List<Task> tasks;
     public TaskDao taskDao;
-    TaskAdapter adapter2;
 
 
 
@@ -41,6 +40,8 @@ public class AddTask extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Add Task");
+
 
 
         add_title= findViewById(R.id.addtitle);
@@ -57,8 +58,8 @@ public class AddTask extends AppCompatActivity  {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         add_state.setAdapter(adapter);
 
-        List<Task> taskList = TaskDatabase.getInstance(getApplicationContext()).taskDao().getAllTasks();
-        totalTasks.setText("Total Tasks: "+ taskList.size());
+         tasks = TaskDatabase.getInstance(getApplicationContext()).taskDao().getAllTasks();
+        totalTasks.setText("Total Tasks: "+ tasks.size());
 
         db= Room.databaseBuilder(getApplicationContext(),
                 TaskDatabase.class, "task_database").allowMainThreadQueries().build();
@@ -80,53 +81,53 @@ public class AddTask extends AppCompatActivity  {
         String title = add_title.getText().toString();
         String description = add_desc.getText().toString();
         String state = add_state.getSelectedItem().toString();
+        boolean tcheck= false;
+        boolean dcheck= false;
+        boolean scheck= false;
 
+        if(title.isEmpty()){
+            add_title.setError("title should not be empty");
+        }else{
+            add_title.setError(null);
+            tcheck= true;
 
-        Task task = new Task();
-        task.setTitle(title);
-        task.setBody(description);
-        task.setState(state);
-        taskDao.insertTask(task);
+        }
+        if(description.isEmpty()){
+            add_desc.setError("the Description should not be empty");
+        }else{
+            add_desc.setError(null);
+            dcheck=true;
+        }
+
+        if(state.equals("Select State"))
+        {
+            Toast.makeText(AddTask.this," select State ",Toast.LENGTH_SHORT).show();
+        } else{
+            scheck = true;
+        }
+
+//        Task task = new Task();
+//        task.setTitle(title);
+//        task.setBody(description);
+//        task.setState(state);
+//        taskDao.insertTask(task);
         TaskModel item = TaskModel.builder()
                 .title(title)
                 .body(description)
                 .state(state)
                 .build();
+        if( tcheck && dcheck && scheck) {
 
-        Amplify.DataStore.save(item,
-                success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
-                error -> Log.e("Tutorial", "Could not save item to DataStore", error)
-        );
+            Amplify.DataStore.save(item,
+                    success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
+                    error -> Log.e("Tutorial", "Could not save item to DataStore", error)
+            );
 
-        Amplify.DataStore.query(TaskModel.class,
-                todos -> {
-                    while (todos.hasNext()) {
-                        TaskModel todo = todos.next();
 
-                        Log.i("Tutorial", "==== Todo ====");
-                        Log.i("Tutorial", "Title: " + todo.getTitle());
-
-                        if (todo.getTitle() != null) {
-                            Log.i("Tutorial", "Title: " + todo.getTitle());
-                        }
-
-                        if (todo.getBody() != null) {
-                            Log.i("Tutorial", "Body: " + todo.getBody());
-                        }
-
-                        if (todo.getState() != null) {
-                            Log.i("Tutorial", "Description: " + todo.getState());
-                        }
-                    }
-                },
-                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
-        );
-
-        
-        Intent intent = new Intent(AddTask.this, MainActivity.class);
-        Toast.makeText(AddTask.this, "Add Task Successfully", Toast.LENGTH_SHORT).show();
-        startActivity(intent);
-
+            Intent intent = new Intent(AddTask.this, MainActivity.class);
+            Toast.makeText(AddTask.this, "Add Task Successfully", Toast.LENGTH_SHORT).show();
+            startActivity(intent);
+        }
 
     }
 }

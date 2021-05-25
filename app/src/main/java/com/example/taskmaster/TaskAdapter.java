@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.TaskModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,12 @@ import java.util.List;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public List<Task> tasks=new ArrayList<Task>();
       private OnItemClickListener mListener;
+
+    public TaskAdapter(Class<MainActivity> mainActivityClass, List<Task> taskList) {
+        this.tasks=taskList;
+
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView taskTitle;
@@ -42,7 +50,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
 
-    public TaskAdapter(List<Task> tasks,OnItemClickListener listener) {
+    public TaskAdapter(List<Task> tasks, OnItemClickListener listener) {
         this.tasks = tasks;
         this.mListener=listener;
     }

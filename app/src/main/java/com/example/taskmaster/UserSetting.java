@@ -17,6 +17,8 @@ public class UserSetting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_setting);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Settings");
+
         Button save = findViewById(R.id.save);
         save.setOnClickListener((view) ->{
             EditText userNameField = findViewById(R.id.username);
