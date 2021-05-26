@@ -81,30 +81,7 @@ public class AddTask extends AppCompatActivity  {
         String title = add_title.getText().toString();
         String description = add_desc.getText().toString();
         String state = add_state.getSelectedItem().toString();
-        boolean tcheck= false;
-        boolean dcheck= false;
-        boolean scheck= false;
-
-        if(title.isEmpty()){
-            add_title.setError("title should not be empty");
-        }else{
-            add_title.setError(null);
-            tcheck= true;
-
-        }
-        if(description.isEmpty()){
-            add_desc.setError("the Description should not be empty");
-        }else{
-            add_desc.setError(null);
-            dcheck=true;
-        }
-
-        if(state.equals("Select State"))
-        {
-            Toast.makeText(AddTask.this," select State ",Toast.LENGTH_SHORT).show();
-        } else{
-            scheck = true;
-        }
+       
 
 //        Task task = new Task();
 //        task.setTitle(title);
@@ -116,8 +93,7 @@ public class AddTask extends AppCompatActivity  {
                 .body(description)
                 .state(state)
                 .build();
-        if( tcheck && dcheck && scheck) {
-
+       
             Amplify.DataStore.save(item,
                     success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
                     error -> Log.e("Tutorial", "Could not save item to DataStore", error)
@@ -130,4 +106,4 @@ public class AddTask extends AppCompatActivity  {
         }
 
     }
-}
+
