@@ -36,27 +36,34 @@ public class HomeTest {
 
         onView(withId(R.id.imageView)).check(matches(isDisplayed()));
     }
+    @Rule
+    public ActivityScenarioRule<UserSetting> settingRule =
+            new ActivityScenarioRule<>(UserSetting.class);
 
-    // test userName
+    // test userName click setting,click edit text,click save,show user name
     @Test
     public void  testUserName() {
+        onView(withId(R.id.uSettings)).perform(click());
+        onView(withId(R.id.username)).perform(click());
+        onView(withId(R.id.save)).perform(click());
         onView(withId(R.id.welcome)).check(matches(isDisplayed()));
+        onView(withText("'s Tasks")).check(matches(isDisplayed()));
     }
-    //test setting btn
-
+    //test task title click title,go to details,check title
+    @Rule
+    public ActivityScenarioRule<Details> detailsRule =
+            new ActivityScenarioRule<>(Details.class);
     @Test
-    public void  settingsButtonTest() {
-        onView(withId(R.id.uSettings)).check(matches(isClickable()));
+    public void  testTitle() {
+        onView(withId(R.id.tTitle)).perform(click());
+        onView(withId(R.id.textView)).perform(click());
+        onView(withText("'s Task 1 Detail")).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void  settingsButtonTest2() {
-        onView(withId(R.id.uSettings)).check(matches(isDisplayed()));
-    }
     //test allTasks btn
     @Test
     public void  allTaskButtonTest1() {
-        onView(withId(R.id.alltask)).check(matches(isClickable()));
+        onView(withId(R.id.alltask)).perform(click());
     }
     @Test
     public void  allTaskButtonTest2() {
@@ -66,7 +73,7 @@ public class HomeTest {
 
     @Test
     public void  addTaskButtonTest1() {
-        onView(withId(R.id.addtask)).check(matches(isClickable()));
+        onView(withId(R.id.addtask)).perform(click());
     }
     @Test
     public void  addTaskButtonTest2() {
