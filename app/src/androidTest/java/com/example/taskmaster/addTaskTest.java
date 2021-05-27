@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -31,7 +32,7 @@ public class addTaskTest {
 
     @Test
     public void  submitButtonTest() {
-        onView(withId(R.id.add1)).check(matches(isClickable()));
+        onView(withId(R.id.add1)).perform(click());;
     }
 
     @Test
