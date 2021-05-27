@@ -81,7 +81,7 @@ public class AddTask extends AppCompatActivity  {
         String title = add_title.getText().toString();
         String description = add_desc.getText().toString();
         String state = add_state.getSelectedItem().toString();
-       
+
 
 //        Task task = new Task();
 //        task.setTitle(title);
@@ -93,7 +93,7 @@ public class AddTask extends AppCompatActivity  {
                 .body(description)
                 .state(state)
                 .build();
-       
+
             Amplify.DataStore.save(item,
                     success -> Log.i("Tutorial", "Saved item: " + success.item().getTitle()),
                     error -> Log.e("Tutorial", "Could not save item to DataStore", error)
