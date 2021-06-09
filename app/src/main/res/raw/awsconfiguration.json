@@ -1,1 +1,49 @@
-{}
+{
+    "UserAgent": "aws-amplify-cli/0.1.0",
+    "Version": "0.1.0",
+    "IdentityManager": {
+        "Default": {}
+    },
+    "AppSync": {
+        "Default": {
+            "ApiUrl": "https://qqa2vsagh5fbtpkbisuwefyfcu.appsync-api.us-east-1.amazonaws.com/graphql",
+            "Region": "us-east-1",
+            "AuthMode": "API_KEY",
+            "ApiKey": "da2-fhdzhpcjgjg4rnoxsvhmkyw2he",
+            "ClientDatabasePrefix": "amplifyDatasource_API_KEY"
+        }
+    },
+    "CredentialsProvider": {
+        "CognitoIdentity": {
+            "Default": {
+                "PoolId": "us-east-1:1bb4e52c-a1e9-4654-8c6e-bd62d85f05fe",
+                "Region": "us-east-1"
+            }
+        }
+    },
+    "CognitoUserPool": {
+        "Default": {
+            "PoolId": "us-east-1_gOpCbBN5x",
+            "AppClientId": "9lpqn1cus061is8nnjvli8guh",
+            "Region": "us-east-1"
+        }
+    },
+    "Auth": {
+        "Default": {
+            "OAuth": {
+                "WebDomain": "taskmaster5dda46d7-5dda46d7-dev.auth.us-east-1.amazoncognito.com",
+                "AppClientId": "9lpqn1cus061is8nnjvli8guh",
+                "SignInRedirectURI": "myapp://callback/",
+                "SignOutRedirectURI": "myapp://signout/",
+                "Scopes": [
+                    "phone",
+                    "email",
+                    "openid",
+                    "profile",
+                    "aws.cognito.signin.user.admin"
+                ]
+            },
+            "authenticationFlowType": "USER_SRP_AUTH"
+        }
+    }
+}

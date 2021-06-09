@@ -1,0 +1,198 @@
+Index: app/src/main/java/com/example/taskmaster/confirmEmail.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.taskmaster;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\n\r\nimport com.amplifyframework.auth.AuthUserAttributeKey;\r\nimport com.amplifyframework.auth.options.AuthSignUpOptions;\r\nimport com.amplifyframework.core.Amplify;\r\n\r\npublic class confirmEmail extends AppCompatActivity {\r\n    EditText code;\r\n    Button confirm;\r\n    String userName, codeSave;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_confirm_email);\r\n\r\n        code = findViewById(R.id.code);\r\n        confirm = findViewById(R.id.confirmEmail);\r\n    }\r\n\r\n    public void confirmEmail(View view) {\r\n\r\n        codeSave = code.getText().toString();\r\n        userName = getIntent().getExtras().get(\"username\").toString();\r\n        Amplify.Auth.confirmSignUp(\r\n                userName,\r\n                codeSave,\r\n                result -> Log.i(\"AuthQuickstart\", result.isSignUpComplete() ? \"Confirm signUp succeeded\" : \"Confirm sign up not complete\"),\r\n                error -> Log.e(\"AuthQuickstart\", error.toString())\r\n        );\r\n        Intent intent = new Intent(this, MainActivity.class);\r\n        startActivity(intent);\r\n\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/taskmaster/confirmEmail.java	(revision fc7f4f62844b504d4fc9f20c327f9a90edfb8598)
++++ app/src/main/java/com/example/taskmaster/confirmEmail.java	(date 1623230559011)
+@@ -22,22 +22,22 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_confirm_email);
+ 
+-        code = findViewById(R.id.code);
+-        confirm = findViewById(R.id.confirmEmail);
++//        code = findViewById(R.id.code);
++//        confirm = findViewById(R.id.confirmEmail);
+     }
+ 
+     public void confirmEmail(View view) {
+ 
+-        codeSave = code.getText().toString();
+-        userName = getIntent().getExtras().get("username").toString();
+-        Amplify.Auth.confirmSignUp(
+-                userName,
+-                codeSave,
+-                result -> Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete"),
+-                error -> Log.e("AuthQuickstart", error.toString())
+-        );
+-        Intent intent = new Intent(this, MainActivity.class);
+-        startActivity(intent);
++//        codeSave = code.getText().toString();
++//        userName = getIntent().getExtras().get("username").toString();
++//        Amplify.Auth.confirmSignUp(
++//                userName,
++//                codeSave,
++//                result -> Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete"),
++//                error -> Log.e("AuthQuickstart", error.toString())
++//        );
++//        Intent intent = new Intent(this, MainActivity.class);
++//        startActivity(intent);
+ 
+ 
+     }
+Index: app/src/main/java/com/example/taskmaster/UserSetting.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.taskmaster;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.preference.PreferenceManager;\r\nimport android.view.MenuItem;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\n\r\npublic class UserSetting extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_user_setting);\r\n        getSupportActionBar().setDisplayHomeAsUpEnabled(true);\r\n        getSupportActionBar().setTitle(\"Settings\");\r\n\r\n        Button save = findViewById(R.id.save);\r\n        save.setOnClickListener((view) ->{\r\n            EditText userNameField = findViewById(R.id.username);\r\n            String name = userNameField.getText().toString();\r\n            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);\r\n            SharedPreferences.Editor editor = sharedPreferences.edit();\r\n            editor.putString(\"username\", name);\r\n            editor.apply();\r\n            Intent main = new Intent(UserSetting.this, MainActivity.class);\r\n            startActivity(main);\r\n        });\r\n    }\r\n\r\n    @Override\r\n    public boolean onOptionsItemSelected(MenuItem item) {\r\n        Intent backArrow =new Intent (getApplicationContext(),MainActivity.class);\r\n        startActivity(backArrow);\r\n        return true;\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/taskmaster/UserSetting.java	(revision fc7f4f62844b504d4fc9f20c327f9a90edfb8598)
++++ app/src/main/java/com/example/taskmaster/UserSetting.java	(date 1623228145766)
+@@ -11,6 +11,7 @@
+ import android.widget.EditText;
+ 
+ public class UserSetting extends AppCompatActivity {
++    String nameOfuser ;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -19,13 +20,15 @@
+         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+         getSupportActionBar().setTitle("Settings");
+ 
++        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
++        nameOfuser  = sharedPreferences.getString("username", "User");
+         Button save = findViewById(R.id.save);
++
+         save.setOnClickListener((view) ->{
+-            EditText userNameField = findViewById(R.id.username);
+-            String name = userNameField.getText().toString();
+-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
++            EditText username = findViewById(R.id.username);
++            nameOfuser  = username.getText().toString();
+             SharedPreferences.Editor editor = sharedPreferences.edit();
+-            editor.putString("username", name);
++            editor.putString("username", nameOfuser );
+             editor.apply();
+             Intent main = new Intent(UserSetting.this, MainActivity.class);
+             startActivity(main);
+Index: app/src/main/java/com/example/taskmaster/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.taskmaster;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\nimport androidx.room.Room;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.preference.PreferenceManager;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.AdapterView;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.TextView;\r\n\r\nimport com.amplifyframework.AmplifyException;\r\nimport com.amplifyframework.core.Amplify;\r\nimport com.amplifyframework.datastore.AWSDataStorePlugin;\r\nimport com.amplifyframework.datastore.generated.model.TaskModel;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class MainActivity extends AppCompatActivity implements TaskAdapter.OnItemClickListener {\r\n\r\n    String title1,title2,title3;\r\n    private TextView taskTitle;\r\n    private TextView taskBody;\r\n    private TextView taskState;\r\n    public TaskDatabase db;\r\n    public TaskDao taskDao;\r\n    TaskAdapter taskAdapter;\r\n    RecyclerView recyclerView ;\r\n\r\n    List<Task> tasks = new ArrayList<>();\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n\r\n\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n        getSupportActionBar().setTitle(\"My Tasks\");\r\n\r\n        taskTitle = findViewById(R.id.tTitle);\r\n        taskBody = findViewById(R.id.tBody);\r\n        taskState =findViewById(R.id.tState);\r\n\r\n        try {\r\n            Amplify.addPlugin(new AWSDataStorePlugin());\r\n            Amplify.configure(getApplicationContext());\r\n\r\n            Log.i(\"Tutorial\", \"Initialized Amplify\");\r\n        } catch (AmplifyException e) {\r\n            Log.e(\"Tutorial\", \"Could not initialize Amplify\", e);\r\n        }\r\n\r\n        TextView welcomeMsg = findViewById(R.id.welcome);\r\n        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);\r\n        welcomeMsg.setText(sharedPreferences.getString(\"username\", \"User\") + \"'s Tasks\");\r\n\r\n        db= Room.databaseBuilder(getApplicationContext(),\r\n                TaskDatabase.class, \"task_database\").allowMainThreadQueries().build();\r\n        taskDao = db.taskDao();\r\n        tasks = (ArrayList<Task>) taskDao.getAllTasks();\r\n        recyclerView = findViewById(R.id.recyclerView);\r\n        LinearLayoutManager layoutManager = new LinearLayoutManager(this);\r\n        recyclerView.setLayoutManager(layoutManager);\r\n        recyclerView.setHasFixedSize(true);\r\n        recyclerView.setLayoutManager(new LinearLayoutManager(this));\r\n\r\n        Amplify.DataStore.query(TaskModel.class,\r\n                todos -> {\r\n                    List<Task> taskList = new ArrayList<>();\r\n                    while (todos.hasNext()) {\r\n                        TaskModel todo = todos.next();\r\n                        Task t = new Task();\r\n                        Log.i(\"Tutorial\", \"==== Todo ====\");\r\n                        Log.i(\"Tutorial\", \"Name: \" + todo.getTitle());\r\n                        Log.i(\"Tutorial\", \"Name: \" + todo.getBody());\r\n                        Log.i(\"Tutorial\", \"Name: \" + todo.getState());\r\n                        t.setTitle(todo.getTitle());\r\n                        t.setBody(todo.getBody());\r\n                        t.setState(todo.getState());\r\n                        taskList.add(t);\r\n                        taskAdapter = new TaskAdapter(MainActivity.class,taskList);\r\n\r\n                    }\r\n                    recyclerView.setAdapter(taskAdapter);\r\n                },\r\n                failure -> Log.e(\"Tutorial\", \"Could not query DataStore\", failure)\r\n        );\r\n\r\n\r\n    }\r\n\r\n    public void addTaskPage(View view) {\r\n        Intent addTask = new Intent(MainActivity.this,AddTask.class);\r\n\r\n        startActivity(addTask);\r\n    }\r\n\r\n    public void allTaskPage(View view) {\r\n        Intent allTasks = new Intent(MainActivity.this,alltasks.class);\r\n        startActivity(allTasks);\r\n\r\n    }\r\n\r\n\r\n    public void goToSettings(View view) {\r\n        Intent settingActivity = new Intent(MainActivity.this,UserSetting.class);\r\n        startActivity(settingActivity);\r\n\r\n    }\r\n\r\n\r\n    @Override\r\n    public void onItemClick(int position) {\r\n\r\n        Intent intent =new Intent(this, Details.class);\r\n        intent.putExtra(\"title\",tasks.get(position).getTitle());\r\n        intent.putExtra(\"body\",tasks.get(position).getBody());\r\n        intent.putExtra(\"state\",tasks.get(position).getState());\r\n\r\n        startActivity(intent);\r\n    }\r\n\r\n    public void gotTosignUp(View view) {\r\n        Intent settingActivity = new Intent(MainActivity.this,SignUp.class);\r\n        startActivity(settingActivity);\r\n\r\n    }\r\n\r\n    public void gotTologin(View view) {\r\n        Intent settingActivity = new Intent(MainActivity.this,Login.class);\r\n        startActivity(settingActivity);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/taskmaster/MainActivity.java	(revision fc7f4f62844b504d4fc9f20c327f9a90edfb8598)
++++ app/src/main/java/com/example/taskmaster/MainActivity.java	(date 1623230559003)
+@@ -17,6 +17,7 @@
+ import android.widget.TextView;
+ 
+ import com.amplifyframework.AmplifyException;
++import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
+ import com.amplifyframework.core.Amplify;
+ import com.amplifyframework.datastore.AWSDataStorePlugin;
+ import com.amplifyframework.datastore.generated.model.TaskModel;
+@@ -50,14 +51,6 @@
+         taskBody = findViewById(R.id.tBody);
+         taskState =findViewById(R.id.tState);
+ 
+-        try {
+-            Amplify.addPlugin(new AWSDataStorePlugin());
+-            Amplify.configure(getApplicationContext());
+-
+-            Log.i("Tutorial", "Initialized Amplify");
+-        } catch (AmplifyException e) {
+-            Log.e("Tutorial", "Could not initialize Amplify", e);
+-        }
+ 
+         TextView welcomeMsg = findViewById(R.id.welcome);
+         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+@@ -95,6 +88,15 @@
+                 failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+         );
+ 
++//        try {
++//            Amplify.addPlugin(new AWSCognitoAuthPlugin());
++//            Amplify.addPlugin(new AWSDataStorePlugin());
++//            Amplify.configure(getApplicationContext());
++//            Log.i("Tutorial", "Initialized Amplify");
++//        } catch (AmplifyException e) {
++//            Log.e("Tutorial", "Could not initialize Amplify", e);
++//        }
++
+ 
+     }
+ 
+Index: app/src/main/java/com/example/taskmaster/SignUp.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.taskmaster;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.preference.PreferenceManager;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\n\r\nimport com.amplifyframework.auth.AuthUserAttributeKey;\r\nimport com.amplifyframework.auth.options.AuthSignUpOptions;\r\nimport com.amplifyframework.core.Amplify;\r\n\r\npublic class SignUp extends AppCompatActivity {\r\n    EditText username, email, password;\r\n    String newName, newEmail, newPassword;\r\n    Button signUp;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_sign_up);\r\n\r\n        username = findViewById(R.id.userInput);\r\n        email = findViewById(R.id.email);\r\n        password = findViewById(R.id.password);\r\n\r\n\r\n        signUp = findViewById(R.id.signUp);\r\n    }\r\n\r\n    public void signup(View view) {\r\n\r\n        newName = ( username.getText()).toString();\r\n        newEmail = ( email.getText()).toString();\r\n        newPassword = ( password.getText()).toString();\r\n        AuthSignUpOptions options = AuthSignUpOptions.builder()\r\n                .userAttribute(AuthUserAttributeKey.email(), newEmail)\r\n                .build();\r\n        Amplify.Auth.signUp(newName, newPassword, options,\r\n                result -> Log.i(\"AuthQuickStart\", \"Result: \" + result.toString()),\r\n                error -> Log.e(\"AuthQuickStart\", \"Sign up failed\", error)\r\n        );\r\n\r\n        Intent intent = new Intent(SignUp.this, confirmEmail.class);\r\n        intent.putExtra(\"username\", newName);\r\n        startActivity(intent);\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/taskmaster/SignUp.java	(revision fc7f4f62844b504d4fc9f20c327f9a90edfb8598)
++++ app/src/main/java/com/example/taskmaster/SignUp.java	(date 1623230464452)
+@@ -17,36 +17,40 @@
+ 
+ public class SignUp extends AppCompatActivity {
+     EditText username, email, password;
+-    String newName, newEmail, newPassword;
++    String nameSave, emailSave, passwordSave, nameOfuser;
+     Button signUp;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_sign_up);
+ 
+-        username = findViewById(R.id.userInput);
+-        email = findViewById(R.id.email);
+-        password = findViewById(R.id.password);
+-
+-
+-        signUp = findViewById(R.id.signUp);
++//        username = findViewById(R.id.userInput);
++//        email = findViewById(R.id.email);
++//        password = findViewById(R.id.password);
++//
++//        signUp = findViewById(R.id.signUp);
+     }
+ 
+     public void signup(View view) {
+-
+-        newName = ( username.getText()).toString();
+-        newEmail = ( email.getText()).toString();
+-        newPassword = ( password.getText()).toString();
+-        AuthSignUpOptions options = AuthSignUpOptions.builder()
+-                .userAttribute(AuthUserAttributeKey.email(), newEmail)
+-                .build();
+-        Amplify.Auth.signUp(newName, newPassword, options,
+-                result -> Log.i("AuthQuickStart", "Result: " + result.toString()),
+-                error -> Log.e("AuthQuickStart", "Sign up failed", error)
+-        );
++//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
++//        nameOfuser = sharedPreferences.getString("username", "User");
++//        nameOfuser = username.getText().toString();
++//        nameSave = ( username.getText()).toString();
++//        emailSave = ( email.getText()).toString();
++//        passwordSave = ( password.getText()).toString();
++//        SharedPreferences.Editor editor = sharedPreferences.edit();
++//        editor.putString("username", nameOfuser);
++//        editor.apply();
++//        AuthSignUpOptions options = AuthSignUpOptions.builder()
++//                .userAttribute(AuthUserAttributeKey.email(), emailSave)
++//                .build();
++//        Amplify.Auth.signUp(nameSave, passwordSave, options,
++//                result -> Log.i("AuthQuickStart", "Result: " + result.toString()),
++//                error -> Log.e("AuthQuickStart", "Sign up failed", error)
++//        );
+ 
+         Intent intent = new Intent(SignUp.this, confirmEmail.class);
+-        intent.putExtra("username", newName);
++        intent.putExtra("username", nameSave);
+         startActivity(intent);
+ 
+     }
