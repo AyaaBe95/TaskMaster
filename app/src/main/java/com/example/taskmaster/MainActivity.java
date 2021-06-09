@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
+import com.amplifyframework.auth.options.AuthSignOutOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.TaskModel;
@@ -51,9 +53,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         taskState =findViewById(R.id.tState);
 
         try {
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.configure(getApplicationContext());
-
             Log.i("Tutorial", "Initialized Amplify");
         } catch (AmplifyException e) {
             Log.e("Tutorial", "Could not initialize Amplify", e);
@@ -130,4 +132,24 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     }
 
 
-}
+    public void gotTologin(View view) {
+        Intent settingActivity = new Intent(MainActivity.this,Login.class);
+        startActivity(settingActivity);
+    }
+
+    public void gotTosignUp(View view) {
+        Intent settingActivity = new Intent(MainActivity.this,SignUp.class);
+        startActivity(settingActivity);
+    }
+
+    public void goToSignOut(View view) {
+        Amplify.Auth.signOut(
+                AuthSignOutOptions.builder().globalSignOut(true).build(),
+                () -> Log.i("AuthQuickstart", "Signed out globally"),
+                error -> Log.e("AuthQuickstart", error.toString())
+        );
+        Intent i = new Intent(MainActivity.this, Login.class);
+        startActivity(i);
+    }
+    }
+
