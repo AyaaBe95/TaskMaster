@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         welcomeMsg.setText(sharedPreferences.getString("username", "User") + "'s Tasks");
 
-        db= Room.databaseBuilder(getApplicationContext(),
-                TaskDatabase.class, "task_database").allowMainThreadQueries().build();
-        taskDao = db.taskDao();
-        tasks = (ArrayList<Task>) taskDao.getAllTasks();
+//        db= Room.databaseBuilder(getApplicationContext(),
+//                TaskDatabase.class, "task_database").allowMainThreadQueries().build();
+//        taskDao = db.taskDao();
+//        tasks = (ArrayList<Task>) taskDao.getAllTasks();
         recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -129,14 +129,5 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         startActivity(intent);
     }
 
-    public void gotTosignUp(View view) {
-        Intent settingActivity = new Intent(MainActivity.this,SignUp.class);
-        startActivity(settingActivity);
 
-    }
-
-    public void gotTologin(View view) {
-        Intent settingActivity = new Intent(MainActivity.this,Login.class);
-        startActivity(settingActivity);
-    }
 }
