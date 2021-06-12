@@ -45,5 +45,11 @@
             },
             "authenticationFlowType": "USER_SRP_AUTH"
         }
+    },
+    "S3TransferUtility": {
+        "Default": {
+            "Bucket": "taskmaster1d6eebb2c2644ff3ba42d3779fee69f6160850-dev",
+            "Region": "us-east-1"
+        }
     }
 }

@@ -28,6 +28,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         private TextView taskTitle;
         private TextView taskBody;
         private TextView taskState;
+        private TextView taskFile;
+
         private OnItemClickListener mListener;
 
         public ViewHolder( View itemView,OnItemClickListener listener) {
@@ -35,6 +37,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             this.taskTitle= itemView.findViewById(R.id.tTitle);
             this.taskBody=itemView.findViewById(R.id.tBody);
             this.taskState=itemView.findViewById(R.id.tState);
+            taskFile = itemView.findViewById(R.id.tFile);
+
             this.mListener=listener;
             itemView.setOnClickListener(this);
 
@@ -79,6 +83,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
         TextView taskState = holder.taskState;
         taskState.setText(task.getState());
+
+        TextView taskFile = holder.taskFile;
+        taskFile.setText(task.getFile());
 
     }
 

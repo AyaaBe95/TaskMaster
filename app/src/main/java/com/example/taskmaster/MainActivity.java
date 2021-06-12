@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,10 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.TaskModel;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +102,25 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
                 failure -> Log.e("Tutorial", "Could not query DataStore", failure)
         );
 
+
+    }
+    protected void uploadFile(Context context){
+        File file = new File(context.getFilesDir(), "key0");
+
+        try{
+            FileWriter fileWriter = new FileWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.append("test");
+            bufferedWriter.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        Amplify.Storage.uploadFile(
+                "key0",
+                file,
+                result -> Log.i("uploadFile", "Successfully Uploaded: "+ result.getKey()),
+                error -> Log.e("uploadFile", "Storage Failure: "+error)
+        );
 
     }
 

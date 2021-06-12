@@ -23,10 +23,12 @@ public final class TaskModel implements Model {
   public static final QueryField TITLE = field("TaskModel", "title");
   public static final QueryField BODY = field("TaskModel", "body");
   public static final QueryField STATE = field("TaskModel", "state");
+  public static final QueryField FILE = field("TaskModel", "file");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String title;
   private final @ModelField(targetType="String", isRequired = true) String body;
   private final @ModelField(targetType="String", isRequired = true) String state;
+  private final @ModelField(targetType="String", isRequired = true) String file;
   public String getId() {
       return id;
   }
@@ -43,11 +45,16 @@ public final class TaskModel implements Model {
       return state;
   }
   
-  private TaskModel(String id, String title, String body, String state) {
+  public String getFile() {
+      return file;
+  }
+  
+  private TaskModel(String id, String title, String body, String state, String file) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.state = state;
+    this.file = file;
   }
   
   @Override
@@ -61,7 +68,8 @@ public final class TaskModel implements Model {
       return ObjectsCompat.equals(getId(), taskModel.getId()) &&
               ObjectsCompat.equals(getTitle(), taskModel.getTitle()) &&
               ObjectsCompat.equals(getBody(), taskModel.getBody()) &&
-              ObjectsCompat.equals(getState(), taskModel.getState());
+              ObjectsCompat.equals(getState(), taskModel.getState()) &&
+              ObjectsCompat.equals(getFile(), taskModel.getFile());
       }
   }
   
@@ -72,6 +80,7 @@ public final class TaskModel implements Model {
       .append(getTitle())
       .append(getBody())
       .append(getState())
+      .append(getFile())
       .toString()
       .hashCode();
   }
@@ -83,7 +92,8 @@ public final class TaskModel implements Model {
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("title=" + String.valueOf(getTitle()) + ", ")
       .append("body=" + String.valueOf(getBody()) + ", ")
-      .append("state=" + String.valueOf(getState()))
+      .append("state=" + String.valueOf(getState()) + ", ")
+      .append("file=" + String.valueOf(getFile()))
       .append("}")
       .toString();
   }
@@ -115,6 +125,7 @@ public final class TaskModel implements Model {
       id,
       null,
       null,
+      null,
       null
     );
   }
@@ -123,7 +134,8 @@ public final class TaskModel implements Model {
     return new CopyOfBuilder(id,
       title,
       body,
-      state);
+      state,
+      file);
   }
   public interface TitleStep {
     BodyStep title(String title);
@@ -136,7 +148,12 @@ public final class TaskModel implements Model {
   
 
   public interface StateStep {
-    BuildStep state(String state);
+    FileStep state(String state);
+  }
+  
+
+  public interface FileStep {
+    BuildStep file(String file);
   }
   
 
@@ -146,11 +163,12 @@ public final class TaskModel implements Model {
   }
   
 
-  public static class Builder implements TitleStep, BodyStep, StateStep, BuildStep {
+  public static class Builder implements TitleStep, BodyStep, StateStep, FileStep, BuildStep {
     private String id;
     private String title;
     private String body;
     private String state;
+    private String file;
     @Override
      public TaskModel build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -159,7 +177,8 @@ public final class TaskModel implements Model {
           id,
           title,
           body,
-          state);
+          state,
+          file);
     }
     
     @Override
@@ -177,9 +196,16 @@ public final class TaskModel implements Model {
     }
     
     @Override
-     public BuildStep state(String state) {
+     public FileStep state(String state) {
         Objects.requireNonNull(state);
         this.state = state;
+        return this;
+    }
+    
+    @Override
+     public BuildStep file(String file) {
+        Objects.requireNonNull(file);
+        this.file = file;
         return this;
     }
     
@@ -206,11 +232,12 @@ public final class TaskModel implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String title, String body, String state) {
+    private CopyOfBuilder(String id, String title, String body, String state, String file) {
       super.id(id);
       super.title(title)
         .body(body)
-        .state(state);
+        .state(state)
+        .file(file);
     }
     
     @Override
@@ -226,6 +253,11 @@ public final class TaskModel implements Model {
     @Override
      public CopyOfBuilder state(String state) {
       return (CopyOfBuilder) super.state(state);
+    }
+    
+    @Override
+     public CopyOfBuilder file(String file) {
+      return (CopyOfBuilder) super.file(file);
     }
   }
   

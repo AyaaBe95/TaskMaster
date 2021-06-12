@@ -14,15 +14,27 @@ public class Task {
     String body;
     @ColumnInfo(name = "state")
     String state;
+    @ColumnInfo(name="fileeName")
+    String file;
 
     public Task(){
 
     }
 
-    public Task(String title, String body, String state) {
+    public Task(String title, String body, String state,String file) {
         this.title = title;
         this.body = body;
         this.state = state;
+        this.file = file;
+
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getTitle() {
